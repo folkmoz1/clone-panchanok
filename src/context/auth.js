@@ -34,19 +34,7 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children, user }) => {
     const [state, dispatch] = useReducer(authReducer, { user })
 
-    const { startPolling, stopPolling }  = useQuery(GET_TOKEN, {
-        fetchPolicy: "network-only",
-        notifyOnNetworkStatusChange: true,
 
-    })
-
-    useEffect(() => {
-        if (user) {
-            startPolling(1000)
-        }
-
-        return stopPolling
-    },[])
 
     return (
         <AuthStateContext.Provider value={state}>

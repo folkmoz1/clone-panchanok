@@ -1,17 +1,9 @@
 import {useState} from "react";
 import {useRouter} from "next/router";
-import {gql, useLazyQuery} from "@apollo/client";
 import LineLoad from "../Loader/lineLoad";
+import axios from "axios";
 
 
-const LOGIN_USER = gql`
-    query LOGIN_USER($userOrEmail: String!, $password: String!) {
-        login(userOrEmail: $userOrEmail, password: $password) {
-            success
-            message
-        }
-    }
-`
 
 export const SignInModal = () => {
     const [variables, setVariables] = useState({
@@ -19,22 +11,34 @@ export const SignInModal = () => {
         password: ''
     })
     const [errors, setErrors] = useState({})
+    const [loading, setLoading] = useState(false)
 
     const { reload } = useRouter()
 
-    const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
-        onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors) ,
-        onCompleted: (data) => {
-            localStorage.setItem('token', data.login.message)
-            if (localStorage.getItem('token'))
-                reload()
-        }
-    })
 
     const submitForm = async e => {
         e.preventDefault()
+        if (variables.userOrEmail !== '' && variables.password !== '') {
 
-        loginUser({variables})
+            try {
+                const resp = await axios.post('/api/auth/login', variables)
+
+
+                const { success } = resp.data
+
+                if (success) {
+                    localStorage.setItem('token', resp.data.message)
+                    reload()
+                } else {
+                    setErrors(resp.data.errors)
+                }
+
+            } catch (e) {
+                console.log(e.message)
+            }
+
+        }
+
     }
 
     return (
@@ -45,15 +49,15 @@ export const SignInModal = () => {
                     <div className={'flex flex-col my-3 '}>
                         <label
                             htmlFor="userOrEmail"
-                            className={`mb-2 ${errors.username && 'text-red-500'}`}
+                            className={`mb-2 ${errors.userOrEmail && 'text-red-500'}`}
                         >
                             {
-                                errors.username ?? 'Username or Email'
+                                errors.userOrEmail ?? 'Username or Email'
                             }
                         </label>
                         <input
                             name={'userOrEmail'}
-                            className={` shadow-sm px-4 py-2 rounded-2xl bg-gray-50  dark:bg-gray-700 ring-4 ${errors.username ? 'ring-red-500' : variables.userOrEmail ? 'ring-green-300' :  'ring-gray-100'} focus:ring-blue-300`}
+                            className={` shadow-sm px-4 py-2 rounded-2xl bg-gray-50  dark:bg-gray-700 ring-4 ${errors.userOrEmail ? 'ring-red-500' : variables.userOrEmail ? 'ring-green-300' :  'ring-gray-100'} focus:ring-blue-300`}
                             autoComplete={'off'}
                             onChange={({target}) => setVariables({...variables, userOrEmail: target.value})}
                             value={variables.userOrEmail}
