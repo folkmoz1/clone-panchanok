@@ -1,5 +1,6 @@
 import { Grid, IconButton, Dialog, Paper } from '@material-ui/core'
 import {useState} from "react";
+import Image from "next/image";
 
 
 export default function PictureGrid( props ) {
@@ -12,22 +13,38 @@ export default function PictureGrid( props ) {
 
             return (
                 <>
-                    <Grid
-                        container
-                        justify="center"
-                        style={{
-                            backgroundImage: `url(${images[0]}`,
-                            backgroundSize: "cover",
-                            width: "100%",
-                            height: 500,
-                            // marginLeft: 20,
-                            backgroundRepeat: "no-repeat",
-                            backgroundPosition: "center",
-                        }}
-                        onClick={() => {
-                            setShowImage(images[0]);
-                        }}
-                    ></Grid>
+                    {
+                        props.preview ? (
+                            <span className={"flex justify-center"}>
+                                <Image
+                                    src={images[0]}
+                                    width={400}
+                                    height={500}
+                                    objectFit={'cover'}
+                                    onClick={() => {
+                                        setShowImage(images[0]);
+                                    }}
+                                />
+                            </span>
+                        ) : (
+                            <Grid
+                                container
+                                justify="center"
+                                style={{
+                                    backgroundImage: `url(${images[0]}`,
+                                    backgroundSize: "cover",
+                                    width: "100%",
+                                    height: 500,
+                                    // marginLeft: 20,
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "center",
+                                }}
+                                onClick={() => {
+                                    setShowImage(images[0]);
+                                }}
+                            ></Grid>
+                        )
+                    }
                 </>
             )
         } else if (imgLength === 2) {
@@ -36,24 +53,43 @@ export default function PictureGrid( props ) {
                     {images.map((image, index) => {
                         return (
                             <Grid item md={6} lg={6} xl={6} xs={6} sm={6} key={index}>
-                                <Grid
-                                    container
-                                    direction="row"
-                                    justify="center"
-                                    style={{
-                                        backgroundImage: `url(${image}`,
-                                        width: "auto",
-                                        height: 400,
-                                        borderRadius: 5,
-                                        marginBottom: 5,
-                                        backgroundSize: "cover",
-                                        backgroundRepeat: "no-repeat",
-                                        backgroundPosition: "center",
-                                    }}
-                                    onClick={() => {
-                                        setShowImage(image);
-                                    }}
-                                ></Grid>
+                                {
+                                    props.preview ? (
+                                        <span className={"flex justify-center md:cursor-pointer"}>
+                                            <Image
+                                                src={image}
+                                                width={400}
+                                                height={600}
+                                                objectFit={'cover'}
+                                                onClick={() => {
+                                                    setShowImage(image);
+                                                }}
+                                                className={'rounded'}
+                                            />
+                                        </span>
+                                    ) : (
+                                        <Grid item md={6} lg={6} xl={6} xs={6} sm={6} key={index}>
+                                            <Grid
+                                                container
+                                                direction="row"
+                                                justify="center"
+                                                style={{
+                                                    backgroundImage: `url(${image}`,
+                                                    width: "auto",
+                                                    height: 400,
+                                                    borderRadius: 5,
+                                                    marginBottom: 5,
+                                                    backgroundSize: "cover",
+                                                    backgroundRepeat: "no-repeat",
+                                                    backgroundPosition: "center",
+                                                }}
+                                                onClick={() => {
+                                                    setShowImage(image);
+                                                }}
+                                            ></Grid>
+                                        </Grid>
+                                    )
+                                }
                             </Grid>
                         );
                     })}
@@ -77,38 +113,36 @@ export default function PictureGrid( props ) {
                                 backgroundRepeat: "no-repeat",
                                 backgroundPosition: "center",
                             }}
-                            key={index}
                             onClick={() => {
                                 setShowImage(images[0]);
                             }}
                         ></Grid>
                     </Grid>{" "}
                     <Grid item md={6} lg={6} xl={6} xs={6} sm={6}>
-                        {images.map((image, index) => {
-                            if (index != 0) {
-                                return (
-                                    <Grid
-                                        container
-                                        direction="row"
-                                        justify="center"
-                                        style={{
-                                            backgroundImage: `url(${image}`,
-                                            width: "auto",
-                                            height: 195,
-                                            borderRadius: 5,
-                                            marginBottom: 5,
-                                            backgroundSize: "cover",
-                                            backgroundRepeat: "no-repeat",
-                                            backgroundPosition: "center",
-                                        }}
-                                        onClick={() => {
-                                            setShowImage(image);
-                                        }}
-                                        key={index}
-                                    ></Grid>
-                                );
-                            }
-                        })}
+                        {images.map((image, index) =>
+                            index !== 0 ? (
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    style={{
+                                        backgroundImage: `url(${image}`,
+                                        width: "auto",
+                                        height: 195,
+                                        borderRadius: 5,
+                                        marginBottom: index === 1 ? 5 : 0,
+                                        marginTop: index === 1 ? 0 : 10 ,
+                                        backgroundSize: "cover",
+                                        backgroundRepeat: "no-repeat",
+                                        backgroundPosition: "center",
+                                    }}
+                                    onClick={() => {
+                                        setShowImage(image);
+                                    }}
+                                    key={index}
+                                ></Grid>
+                            ) : null
+                        )}
                     </Grid>
                 </Grid>
             )

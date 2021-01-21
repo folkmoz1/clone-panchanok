@@ -1,8 +1,10 @@
 import {useQuery, gql} from "@apollo/client";
 import Card__Post from "../components/Card";
 import {ClickAwayListener, Collapse, Fab, Grow, Tooltip} from "@material-ui/core";
-import {AddRounded} from "@material-ui/icons";
+import {AddRounded, PostAddRounded} from "@material-ui/icons";
 import {useState} from "react";
+import FloatMenu from "../components/FloatMenu";
+import CustomModal from "../components/Modal";
 
 
 
@@ -43,11 +45,11 @@ const GET_POSTS = gql`
 
 export default function Index({ initialState: { $token, $user } }) {
 
-    const [openMenu, setOpenMenu] = useState(false)
 
-    const { loading, data, error } = useQuery(GET_POSTS)
 
-    if (loading) {
+    const { loading:postLoading, data, error } = useQuery(GET_POSTS)
+
+    if (postLoading) {
         return <h1>Loading...</h1>
     }
 
@@ -70,43 +72,14 @@ export default function Index({ initialState: { $token, $user } }) {
                     }
                 </div>
                 <div className={" md:w-1/4 md:pr-10"}>
-                    <div className={"fixed bottom-10 right-10 flex gap-4 flex-col items-end"}>
-                        {
-                            openMenu &&
-                            <Grow in={openMenu}>
-                                <div className={'flex flex-col items-center'}>
-                                    <Tooltip
-                                        title="สร้างโพสต์"
-                                        aria-label="add"
-                                        arrow
-                                        placement={'left'}
-                                    >
-                                        <Fab
-                                            variant={"extended"}
-                                            size={"small"}
-                                            style={{boxShadow: 'none'}}
-                                        >
-                                            สร้างโพสต์
-                                        </Fab>
-                                    </Tooltip>
-                                </div>
-                            </Grow>
-                        }
-                        <ClickAwayListener onClickAway={() => setOpenMenu(false)}>
-                            <Fab
-                                onClick={() => setOpenMenu(!openMenu)}
-                                color="secondary"
-                                style={{
-                                    transform: openMenu ? 'rotateZ(135deg)': '',
-                                    transition: '.2s transform'
-                                }}
-                            >
-                                <AddRounded  fontSize={"large"}/>
-                            </Fab>
-                        </ClickAwayListener>
-                    </div>
+                    {
+                        $user &&
+                        <FloatMenu />
+
+                    }
                 </div>
             </div>
+
         </>
     )
 }

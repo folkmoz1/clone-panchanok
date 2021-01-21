@@ -88,14 +88,14 @@ const Card__Post = ({post, user}) => {
                         </div>
                     </div>
                 </div>
-                <PictureGrid images={images} />
+                <PictureGrid images={images} preview={false}/>
                 <hr className={"mt-2"}/>
                 <Actions actions={actions} postId={postId} user={user} addActions={addActions} inputRef={inputRef}/>
                 {
                     user &&
                     <>
                         <hr className={"mb-2"}/>
-                        <CommentInput user={user} ref={inputRef} func={addComment}/>
+                        <CommentInput user={user} cls={false} ref={inputRef} func={addComment}/>
                     </>
                 }
             </div>

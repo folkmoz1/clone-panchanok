@@ -117,7 +117,7 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
     }
 
 
-    return { pageProps, $initialState : {$user: user, $token: token, $err: err}}
+    return { pageProps, $initialState : {$user: user, $token: token}}
 }
 
 export default MyApp

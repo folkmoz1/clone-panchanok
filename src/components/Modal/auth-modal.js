@@ -5,13 +5,12 @@ import axios from "axios";
 
 
 
-export const SignInModal = () => {
+export const SignInModal = ({ setLoading, loading }) => {
     const [variables, setVariables] = useState({
         userOrEmail: '',
         password: ''
     })
     const [errors, setErrors] = useState({})
-    const [loading, setLoading] = useState(false)
 
     const { reload } = useRouter()
 
@@ -19,7 +18,7 @@ export const SignInModal = () => {
     const submitForm = async e => {
         e.preventDefault()
         if (variables.userOrEmail !== '' && variables.password !== '') {
-
+            setLoading(true)
             try {
                 const resp = await axios.post('/api/auth/login', variables)
 
@@ -30,10 +29,12 @@ export const SignInModal = () => {
                     localStorage.setItem('token', resp.data.message)
                     reload()
                 } else {
+                    setLoading(false)
                     setErrors(resp.data.errors)
                 }
 
             } catch (e) {
+                setLoading(false)
                 console.log(e.message)
             }
 
@@ -89,22 +90,12 @@ export const SignInModal = () => {
                         {loading ? 'รอสักครู่...' : 'เข้าสู่ระบบ'}
                     </button>
                 </form>
-                {
-                    loading &&
-                    <LineLoad />
-                }
             </div>
+            {
+                loading &&
+                    <LineLoad />
+            }
             <style jsx>{`
-              .form__container:before {
-                ${loading && `
-                    content: "";
-                    position: absolute;
-                    inset: 0;
-                    background-color: rgba(255,255,255,.6);
-                    z-index: 1;
-                    pointer-events: none;
-                `}
-              }
 
               .--form {
                 min-height: 300px;

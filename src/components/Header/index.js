@@ -12,10 +12,12 @@ const WithoutAuthMenu = () => {
         page: ''
     })
 
+    const [loading, setLoading] = useState(false)
+
     const selectModal = page => {
         switch (page) {
             case 'signIn':
-                return <SignInModal />
+                return <SignInModal loading={loading} setLoading={setLoading} />
 
         }
     }
@@ -40,6 +42,10 @@ const WithoutAuthMenu = () => {
                 <CustomModal
                     open={openModal.active}
                     setOpen={setOpenModal}
+                    maxSize={'screen-sm'}
+                    loading={loading}
+                    pd={'py-8 px-5'}
+                    bg={'bg-white'}
                 >
                     {selectModal(openModal.page)}
                 </CustomModal>
@@ -114,7 +120,7 @@ export default function Header() {
                 right: 0;
                 left: 0;
                 background-color: #fff;
-                z-index: 109;
+                z-index: 109+;
               }
             `}</style>
         </>

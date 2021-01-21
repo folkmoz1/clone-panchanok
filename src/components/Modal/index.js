@@ -1,23 +1,36 @@
 import Modal from '@material-ui/core/Modal'
 import Fade from '@material-ui/core/Fade'
+import {IconButton} from "@material-ui/core";
+import {CloseRounded} from "@material-ui/icons";
+import useResize from "../../hooks/useResize";
 
-const CustomModal = ({ children, open, setOpen, loading }) => {
+const CustomModal = (
+    {
+        children,
+        open,
+        setOpen,
+        loading,
+        maxSize = 'md',
+        posit = 'center',
+        bg = '',
+        ct = true,
+        pd = ''
+    }) => {
+
 
     const ModalBody = (
         <>
-            <div id={'modal--wrapper'} className={"relative w-full h-screen bg-white outline-none transition-none py-8 px-5 md:mx-5 md:h-auto md:max-w-screen-sm "}>
+            <div id={'modal--wrapper'} className={`relative w-full h-screen ${bg} outline-none transition-none ${pd} md:mx-5 md:h-auto md:max-w-${maxSize} `}>
                 {children}
-                <span
-                    className={'close--btn'}
-                    onClick={() => setOpen(false)}
-                >
-                        <img
-                            src="/images/svg/svg--close.svg"
-                            alt="close modal icon"
-                            width={17}
-                            height={17}
-                        />
-                    </span>
+                {
+                    !loading && ct &&
+                    <span
+                        className={'close--btn'}
+                        onClick={() => setOpen(false)}
+                    >
+                        <CloseRounded color={"disabled"} fontSize={"large"} />
+                </span>
+                }
             </div>
             <style jsx>{`
               .close--btn {
@@ -25,18 +38,17 @@ const CustomModal = ({ children, open, setOpen, loading }) => {
                 top: 12px;
                 right: 10px;
                 cursor: pointer;
-                width: 38px;
-                height: 38px;
+                width: 40px;
+                height: 40px;
                 border-radius: 50%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 transition: 0.2s background-color;
-                background: #e3e6e7;
               }
 
               .close--btn:active {
-                background-color: #d0d2d2;
+                background-color: #fcfcfc;
               }
             `}</style>
         </>
@@ -48,7 +60,7 @@ const CustomModal = ({ children, open, setOpen, loading }) => {
                 open={open}
                 onClose={() => setOpen(false)}
                 closeAfterTransition
-                className={'flex justify-center items-center'}
+                className={`flex justify-center items-${posit} ${posit === 'start' && 'md:pt-20' }`}
                 disableBackdropClick
             >
                 <Fade in={open}>

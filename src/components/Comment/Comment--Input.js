@@ -3,11 +3,11 @@ import {IconButton} from "@material-ui/core";
 import {forwardRef} from "react";
 
 
-const CommentInput = forwardRef(({children, func, user}, ref) => {
+const CommentInput = forwardRef(({children, func, user, cls = true}, ref) => {
 
     return (
         <>
-            <div className={'comment--wrapper'}>
+            <div className={`comment--wrapper ${cls && 'cls'}`}>
                 <div className={'avatar--me mr-2'}>
                     <Image
                         src={user.image}
@@ -54,7 +54,7 @@ const CommentInput = forwardRef(({children, func, user}, ref) => {
               }
 
               @media (max-width: 768px) {
-                .comment--wrapper {
+                .comment--wrapper.cls {
                   position: fixed;
                   bottom: 0;
                   width: 100%;
