@@ -91,6 +91,8 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
         try {
             const getToken = cookie.get('token')
 
+            token = getToken
+
             const resp = await axios.post(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/me`,null,{
                 headers: {
                     cookie: getToken
@@ -100,7 +102,6 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
             const { me } = resp.data
 
             user = me
-            token = getToken
 
         }  catch (e) {
             user = null
@@ -115,7 +116,7 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
     }
 
 
-    return { pageProps, $initialState : {$user: user, $token: token}}
+    return { pageProps, $initialState : {$user: user, $token: token, $msg: 'folkmoz'}}
 }
 
 export default MyApp
