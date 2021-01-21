@@ -6,6 +6,7 @@ import Cookies from 'cookies'
 import { gql } from '@apollo/client'
 import request from "graphql-request";
 import Header from "../components/Header";
+import axios from "axios";
 
 import '../../styles/globals.css'
 import Head from "next/head";
@@ -90,11 +91,13 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
         try {
             const getToken = cookie.get('token')
 
-            const resp = await request(`${process.env.BACKEND_URI}`, ME, {
-                token: getToken
+            const resp = await axios.post(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/me`,null,{
+                headers: {
+                    cookie: getToken
+                }
             })
 
-            const { me } = resp
+            const { me } = resp.data
 
             user = me
             token = getToken
