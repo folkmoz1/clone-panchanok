@@ -31,8 +31,6 @@ function MyApp({ Component, pageProps, $initialState }) {
     useEffect(() => {
         if (initialState.$token) {
             localStorage.setItem('token', initialState.$token)
-        } else {
-            localStorage.removeItem('token')
         }
     },[])
 
@@ -97,7 +95,7 @@ MyApp.getInitialProps = async ({ ctx, Component}) => {
         console.log(token)
 
         try {
-            const resp = await request(process.env.BACKEND_URI, ME, {
+            const resp = await request(`${process.env.BACKEND_URI}`, ME, {
                 token
             })
 
