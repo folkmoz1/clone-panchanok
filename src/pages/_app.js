@@ -9,7 +9,7 @@ import App from "next/app";
 import Header from "../components/Header";
 
 import '../../styles/globals.css'
-import {Head} from "next/document";
+import Head from "next/head";
 
 
 const ME = gql`
