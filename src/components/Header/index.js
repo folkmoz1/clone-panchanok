@@ -120,7 +120,7 @@ export default function Header() {
                 right: 0;
                 left: 0;
                 background-color: #fff;
-                z-index: 109+;
+                z-index: 109;
               }
             `}</style>
         </>
