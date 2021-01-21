@@ -3,10 +3,10 @@ import {gql, useSubscription} from "@apollo/client";
 const NEW_REACTION = gql`
     subscription newReaction {
         newReaction {
-            uuid
+            id
             content
             message {
-                uuid
+                id
                 from
                 to
             }
