@@ -82,7 +82,7 @@ function MyApp({ Component, pageProps, $initialState }) {
 MyApp.getInitialProps = async ({ ctx, Component, router }) => {
     const { req, res } = ctx
 
-    let user, token, pageProps = {}
+    let user, token, pageProps = {}, err
 
     if (req) {
 
@@ -105,6 +105,7 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
 
         }  catch (e) {
             user = null
+            err = e.message
         }
 
     }
@@ -116,7 +117,7 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
     }
 
 
-    return { pageProps, $initialState : {$user: user, $token: token, $msg: 'folkmoz'}}
+    return { pageProps, $initialState : {$user: user, $token: token, $err: err}}
 }
 
 export default MyApp
