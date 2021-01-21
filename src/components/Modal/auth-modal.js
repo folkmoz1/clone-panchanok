@@ -20,13 +20,14 @@ export const SignInModal = () => {
     })
     const [errors, setErrors] = useState({})
 
+    const { reload } = useRouter()
 
     const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
         onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors) ,
         onCompleted: (data) => {
             localStorage.setItem('token', data.login.message)
-            window.location.href = '/'
-
+            if (localStorage.getItem('token'))
+                reload()
         }
     })
 
@@ -71,7 +72,7 @@ export const SignInModal = () => {
                             type={'password'}
                             name={'password'}
                             autoComplete={'off'}
-                            className={` shadow-sm px-4 py-2 rounded-2xl bg-gray-50  dark:bg-gray-700 ring-4 ${errors.password ? 'ring-red-500' : variables.userOrEmail ? 'ring-green-300' :  'ring-gray-100'} focus:ring-blue-300`}
+                            className={` shadow-sm px-4 py-2 rounded-2xl bg-gray-50  dark:bg-gray-700 ring-4 ${errors.password ? 'ring-red-500' : variables.password ? 'ring-green-300' :  'ring-gray-100'} focus:ring-blue-300`}
                             onChange={({target}) => setVariables({...variables, password: target.value})}
                             value={variables.password}
                         />

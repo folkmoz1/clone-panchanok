@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react'
 import ApolloProvider from "../apollo/ApolloProvider";
 import {AuthProvider} from "../context/auth"
 import {MessageProvider} from "../context/message";
-import { parse } from 'cookie'
+import Cookies from 'cookies'
 import { gql } from '@apollo/client'
-import { request } from "graphql-request";
-import App from "next/app";
+import request from "graphql-request";
 import Header from "../components/Header";
 
 import '../../styles/globals.css'
@@ -13,8 +12,8 @@ import Head from "next/head";
 
 
 const ME = gql`
-    query ME ($token: String!) {
-        me (token: $token)
+    query ME($token: String) {
+        me(token: $token) 
         {
             id
             username
@@ -26,7 +25,7 @@ const ME = gql`
     }
 `
 
-function MyApp({ Component, pageProps, $initialState, client }) {
+function MyApp({ Component, pageProps, $initialState }) {
     const [initialState, setInitialState] = useState($initialState)
 
     useEffect(() => {
@@ -81,36 +80,45 @@ function MyApp({ Component, pageProps, $initialState, client }) {
   )
 }
 
-MyApp.getInitialProps = async context => {
-    const { ctx: { req, res }, Component } = context
+MyApp.getInitialProps = async ({ ctx, Component}) => {
+    const { req, res } = ctx
 
-    const cookie = req ? parse(req.headers.cookie || '') : ''
 
     let user = null,
-        token = null
+        token,
+        pageProps
 
 
-    if (cookie.token) {
+    if (req) {
+        const cookies = new Cookies(req, res)
+
+        token = cookies.get('token')
+
+        console.log(token)
+
         try {
-
             const resp = await request(process.env.BACKEND_URI, ME, {
-                token: cookie.token
+                token
             })
 
-            user = resp.me
-            token = cookie.token
+            const { me } = resp
+
+            user = me
+
         } catch (err) {
+            console.log(err)
             user = null
-            token = null
         }
 
     }
 
-    const pageProps = await App.getInitialProps(context)
+    if (Component.getInitialProps) {
+        pageProps = await Component.getInitialProps({...ctx})
 
-    pageProps.isSSR = !!req
+        pageProps.isSSR = !!req
+    }
 
-    return { $initialState: {$user: user, $token: token }, ...pageProps }
+    return { pageProps, $initialState: {$user: user, $token: token } }
 }
 
 export default MyApp
