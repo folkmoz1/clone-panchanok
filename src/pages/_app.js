@@ -9,6 +9,7 @@ import App from "next/app";
 import Header from "../components/Header";
 
 import '../../styles/globals.css'
+import {Head} from "next/document";
 
 
 const ME = gql`
@@ -40,6 +41,10 @@ function MyApp({ Component, pageProps, $initialState, client }) {
         <ApolloProvider>
             <AuthProvider user={initialState.$user}>
                 <MessageProvider>
+
+                    <Head>
+                        <title>panchanok | home</title>
+                    </Head>
 
                     <>
                         <div id={'main'}>
