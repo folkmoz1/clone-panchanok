@@ -78,45 +78,41 @@ function MyApp({ Component, pageProps, $initialState }) {
   )
 }
 
-MyApp.getInitialProps = async ({ ctx, Component}) => {
+MyApp.getInitialProps = async ({ ctx, Component, router }) => {
     const { req, res } = ctx
 
-
-    let user = null,
-        token,
-        pageProps
-
+    let user, token, pageProps = {}
 
     if (req) {
-        const cookies = new Cookies(req, res)
 
-        token = cookies.get('token')
-
-        console.log(token)
+        const cookie = new Cookies(req, res)
 
         try {
+            const getToken = cookie.get('token')
+
             const resp = await request(`${process.env.BACKEND_URI}`, ME, {
-                token
+                token: getToken
             })
 
             const { me } = resp
 
             user = me
+            token = getToken
 
-        } catch (err) {
-            console.log(err)
+        }  catch (e) {
             user = null
         }
 
     }
 
-    if (Component.getInitialProps) {
-        pageProps = await Component.getInitialProps({...ctx})
 
-        pageProps.isSSR = !!req
+    if (Component.getInitialProps) {
+        pageProps = await Component.getInitialProps({...ctx, isSsr: !!req})
+        pageProps.isSsr = !!req
     }
 
-    return { pageProps, $initialState: {$user: user, $token: token } }
+
+    return { pageProps, $initialState : {$user: user, $token: token}}
 }
 
 export default MyApp
