@@ -1,37 +1,40 @@
-import { useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
+import { NProgress } from '../../utils/NProgress'
+import Cookies from 'cookies'
+import {gql} from '@apollo/client'
+import Header from "../components/Header";
+import axios from "axios";
+import Head from "next/head";
+import { Router } from 'next/dist/client/router';
+
 import ApolloProvider from "../apollo/ApolloProvider";
 import {AuthProvider} from "../context/auth"
 import {MessageProvider} from "../context/message";
-import Cookies from 'cookies'
-import { gql } from '@apollo/client'
-import request from "graphql-request";
-import Header from "../components/Header";
-import axios from "axios";
 
 import '../../styles/globals.css'
-import Head from "next/head";
 
 
-const ME = gql`
-    query ME($token: String) {
-        me(token: $token) 
-        {
-            id
-            username
-            firstName
-            lastName
-            image
-            email
-        }
-    }
-`
+Router.events.on("routeChangeStart", () => {
+    NProgress.start()
+});
+Router.events.on("routeChangeComplete", () => {
+    NProgress.done()
+});
+Router.events.on("routeChangeError", () => {
+    NProgress.done()
+});
+
+
 
 function MyApp({ Component, pageProps, $initialState }) {
     const [initialState, setInitialState] = useState($initialState)
 
     useEffect(() => {
+        NProgress.start()
         if (initialState.$token) {
             localStorage.setItem('token', initialState.$token)
+        } else {
+            localStorage.removeItem('token')
         }
     },[])
 
@@ -55,6 +58,13 @@ function MyApp({ Component, pageProps, $initialState }) {
                           #__next {
                             overflow-x: hidden;
                           }
+                          
+                          #nprogress {
+                            z-index: 999999;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                          }
 
                           .content__body {
                             padding-top: 70px;
@@ -70,6 +80,11 @@ function MyApp({ Component, pageProps, $initialState }) {
                             align-items: center;
                             min-height: 100vh;
                           }
+
+                          #nprogress .bar {
+                            background: #69f6ed !important;
+                          }
+
                         `}</style>
                     </>
 
@@ -80,34 +95,38 @@ function MyApp({ Component, pageProps, $initialState }) {
 }
 
 MyApp.getInitialProps = async ({ ctx, Component, router }) => {
-    const { req, res } = ctx
+    const {req, res} = ctx
 
-    let user, token, pageProps = {}, err
+    let user = null,
+        token = null,
+        pageProps = {}
 
     if (req) {
 
         const cookie = new Cookies(req, res)
 
-        try {
-            const getToken = cookie.get('token')
+        const getToken = cookie.get('token')
 
-            token = getToken
+        if (getToken) {
+            try {
 
-            const resp = await axios.post(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/me`,null,{
-                headers: {
-                    cookie: getToken
-                }
-            })
 
-            const { me } = resp.data
+                const resp = await axios.post(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/me`, null, {
+                    headers: {
+                        cookie: getToken
+                    }
+                })
 
-            user = me
+                const {me} = resp.data
 
-        }  catch (e) {
-            user = null
-            err = e.message
+                token = getToken
+
+                user = me
+
+            } catch (e) {
+                cookie.set('token')
+            }
         }
-
     }
 
 

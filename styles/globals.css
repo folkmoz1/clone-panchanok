@@ -59,6 +59,10 @@ button:disabled {
 
 @tailwind utilities;
 
+.rounded-50p {
+    border-radius: 50%;
+}
+
 .bg-gray-custom {
     background: #111111;
 }

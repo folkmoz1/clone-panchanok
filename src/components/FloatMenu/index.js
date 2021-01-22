@@ -1,20 +1,26 @@
 import {Fab, Grow, Tooltip} from "@material-ui/core";
 import {AddRounded, PostAddRounded} from "@material-ui/icons";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import CustomModal from "../Modal";
 import CreatePost from "../Modal/createPost";
 import useResize from "../../hooks/useResize";
 
 
-export default function FloatMenu() {
+export default function FloatMenu({ spanEl }) {
     const [openMenu, setOpenMenu] = useState(false)
 
     const [openModal, setOpenModal] = useState(false)
 
-    const [loading, setLoading] = useState(false)
+    const [ssc, setSSC] = useState(false)
 
 
     const { isMobile } = useResize()
+
+    useEffect(() => {
+        if (ssc)
+            spanEl.current.scrollIntoView({behavior: 'smooth'})
+            setSSC(false)
+    },[ssc])
 
     return (
         <>
@@ -57,14 +63,13 @@ export default function FloatMenu() {
             </div>
             <CustomModal
                 maxSize={'xl'}
-                loading={loading}
                 setOpen={setOpenModal}
                 open={openModal}
                 posit={'start'}
                 ct={false}
                 bg={'bg-white'}
             >
-                <CreatePost setOpen={setOpenModal} />
+                <CreatePost  setOpen={setOpenModal} setSSC={setSSC}/>
             </CustomModal>
         </>
     )

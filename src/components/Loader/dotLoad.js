@@ -1,10 +1,13 @@
 
 
-export default function DotLoad() {
+export default function DotLoad(
+    {
+        color = '#333'
+    }) {
 
     return (
         <>
-            <div className="sk-circle">
+                <div className="sk-circle">
                 <div className="sk-circle1 sk-child"></div>
                 <div className="sk-circle2 sk-child"></div>
                 <div className="sk-circle3 sk-child"></div>
@@ -19,6 +22,14 @@ export default function DotLoad() {
                 <div className="sk-circle12 sk-child"></div>
             </div>
             <style jsx>{`
+                  .spinner--wrapper {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    z-index: 10;
+                  }
+
                   .sk-circle {
                     margin: 50px auto;
                     width: 40px;
@@ -40,7 +51,7 @@ export default function DotLoad() {
                     margin: 0 auto;
                     width: 15%;
                     height: 15%;
-                    background-color: #333;
+                    background-color: ${color};
                     border-radius: 100%;
                     -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
                     animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
