@@ -70,7 +70,7 @@ const Card__Post = ({post, user, setPosts, posts}) => {
 
     return (
         <>
-            <div className={"card"}>
+            <div className={`card ${deleteLoading && 'loading'}`}>
                 <div className={"card__head"}>
                     <div className="flex py-2 w-full">
                         <div className="flex-0">

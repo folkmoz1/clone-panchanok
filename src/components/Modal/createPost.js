@@ -5,8 +5,9 @@ import {CloseRounded, ImageRounded} from "@material-ui/icons";
 import Image from "next/image";
 import {useAuthState} from "../../context/auth";
 import {gql, useMutation} from "@apollo/client";
-import { NProgress } from '../../../utils/NProgress'
+import {NProgress} from '../../../utils/NProgress'
 import {GET_POSTS} from "../../pages";
+import LineLoad from "../Loader/lineLoad";
 
 const CREATE_POST = gql`
     mutation CREATE_POST($images: [ImageFileInput]! $desc: String!) {
@@ -50,6 +51,8 @@ const CreatePost = ({ setOpen, setSSC }) => {
     const inputRef = useRef()
 
     const desc = inputRef.current?.innerText
+
+    const checkValue = desc !== '' && images.length > 0 ? false : true
 
     const { user } = useAuthState()
 
@@ -168,7 +171,7 @@ const CreatePost = ({ setOpen, setSSC }) => {
 
     return (
         <>
-            <Paper elevation={0} component={"form"} onSubmit={submitForm}>
+            <Paper elevation={0} component={"form"} onSubmit={submitForm} className={`form__container relative ${createLoading && 'pointer-events-none'}`}>
                 <div className={"flex flex-col pt-6 px-4 md:py-10 md:px-16 relative"}>
                     <div className={"text-center font-bold text-2xl "}>
                         <h1>สร้างโพสต์</h1>
@@ -238,28 +241,47 @@ const CreatePost = ({ setOpen, setSSC }) => {
                         </span>
                         <span>
                             <button
-                                disabled={false}
-                                className={"bg-green-400 px-4 py-2 text-white rounded hover:bg-green-500"}
+                                disabled={checkValue}
+                                className={`bg-green-400 px-4 py-2 text-white rounded ${!checkValue && 'hover:bg-green-500'}`}
                             >
                                 สร้างโพสต์
                             </button>
                         </span>
                     </div>
-                    <span
-                        className={'close--btn'}
-                        onClick={() => setOpen(false)}
-                    >
-                        <CloseRounded color={"disabled"} fontSize={"large"} />
-                    </span>
+                    {
+                        !createLoading &&
+                        <span
+                            className={'close--btn'}
+                            onClick={() => setOpen(false)}
+                        >
+                            <CloseRounded color={"disabled"} fontSize={"large"}/>
+                        </span>
+                    }
                 </div>
-            </Paper>
-            <style jsx>{`
-              .content-editable:empty:before {
-                    content: attr(data-placeholder);
-                    color: rgba(0, 0, 0, 0.42);
+                {
+                    createLoading &&
+                    <LineLoad color={'#22f1f1'}/>
                 }
-                
-                .close--btn {
+            </Paper>
+            <style jsx global>{`
+
+
+              .form__container:after {
+                ${createLoading && `
+                    content: "";
+                    inset: 0;
+                    position: absolute;
+                    background: rgba(255, 255, 255, .6);
+                    z-index: 5;
+                `}
+              }
+
+              .content-editable:empty:before {
+                content: attr(data-placeholder);
+                color: rgba(0, 0, 0, 0.42);
+              }
+
+              .close--btn {
                 position: absolute;
                 top: 12px;
                 right: 10px;
