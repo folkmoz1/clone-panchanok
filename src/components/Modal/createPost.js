@@ -39,6 +39,7 @@ const CreatePost = ({ setOpen, setSSC }) => {
     const [error, setError] = useState({status: false, message: ''})
     const [previewImage, setPreviewImage] = useState([])
     const [uploaded, setUploaded] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const [createPost, { loading:createLoading }  ] = useMutation(CREATE_POST, {
         refetchQueries: [
@@ -126,6 +127,7 @@ const CreatePost = ({ setOpen, setSSC }) => {
         if (desc === '' || images.length < 0) return
         try {
             NProgress.start()
+            setLoading(true)
             await images.map(file => uploadImage(file))
 
         } catch (e) {
@@ -171,7 +173,7 @@ const CreatePost = ({ setOpen, setSSC }) => {
 
     return (
         <>
-            <Paper elevation={0} component={"form"} onSubmit={submitForm} className={`form__container relative ${createLoading && 'pointer-events-none'}`}>
+            <Paper elevation={0} component={"form"} onSubmit={submitForm} className={`form__container relative ${loading && 'pointer-events-none'}`}>
                 <div className={"flex flex-col pt-6 px-4 md:py-10 md:px-16 relative"}>
                     <div className={"text-center font-bold text-2xl "}>
                         <h1>สร้างโพสต์</h1>
@@ -249,7 +251,7 @@ const CreatePost = ({ setOpen, setSSC }) => {
                         </span>
                     </div>
                     {
-                        !createLoading &&
+                        !loading &&
                         <span
                             className={'close--btn'}
                             onClick={() => setOpen(false)}
@@ -259,7 +261,7 @@ const CreatePost = ({ setOpen, setSSC }) => {
                     }
                 </div>
                 {
-                    createLoading &&
+                    loading &&
                     <LineLoad color={'#22f1f1'}/>
                 }
             </Paper>
@@ -267,7 +269,7 @@ const CreatePost = ({ setOpen, setSSC }) => {
 
 
               .form__container:after {
-                ${createLoading && `
+                ${loading && `
                     content: "";
                     inset: 0;
                     position: absolute;
