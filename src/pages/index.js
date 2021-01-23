@@ -2,9 +2,11 @@ import {useQuery, gql, useSubscription} from "@apollo/client";
 import Card__Post from "../components/Card";
 import {useEffect, useRef, useState} from "react";
 import FloatMenu from "../components/FloatMenu";
+import {request} from "graphql-request";
+import useSWR from "swr";
 
 
-export const GET_POSTS = gql`
+export const GET_POSTS = `
     query GET_POST {
         getPosts
         {
@@ -73,8 +75,11 @@ const NEW_POST = gql`
     }
 `
 
-export default function Index({ initialState: { $token, $user } }) {
-    const [posts, setPosts] = useState([])
+const fetcher = (query, variables) => {
+    return request(`${process.env.BACKEND_URI}`, query, variables)
+}
+
+export default function Index({ posts: initialData, initialState: { $token, $user } }) {
 
     const scrollIntoView = useRef()
 
@@ -82,28 +87,22 @@ export default function Index({ initialState: { $token, $user } }) {
         NEW_POST
     )
 
-    const { loading:postLoading, data, error } = useQuery(GET_POSTS, {
-        onCompleted: data => setPosts(data.getPosts)
+    const { data, error, mutate  } = useSWR(GET_POSTS, fetcher, {
+        initialData,
+        revalidateOnMount: true
     })
 
     useEffect(() => {
         if (postError) console.log(postError)
 
         if (postData) {
-
-            setPosts(() => {
-                const newData = [...posts]
-
-                newData.unshift(postData.newPost)
-
-                return newData
-            })
+            mutate()
         }
 
     },[postData, postError])
 
 
-    if (postLoading) {
+    if (!data) {
         return <h1>Loading...</h1>
     }
 
@@ -122,13 +121,14 @@ export default function Index({ initialState: { $token, $user } }) {
                 <div className={" bg-gray-300 w-full  md:w-1/2 flex flex-col items-center border-r border-l border-gray-200 h-full "}>
                     <span ref={scrollIntoView}></span>
                     {
-                        posts.map(post => (
+                        data.getPosts.map(post => (
                             <Card__Post
                                 post={post}
                                 user={$user}
                                 key={post.id}
-                                posts={posts}
-                                setPosts={setPosts}
+                                // posts={posts}
+                                // setPosts={setPosts}
+                                mutatePosts={mutate}
                             />
                         ))
                     }
@@ -144,6 +144,24 @@ export default function Index({ initialState: { $token, $user } }) {
 
         </>
     )
+}
+
+Index.getInitialProps =  async ({ req, res, isSsr }) => {
+
+    if (req) {
+        try {
+            const resp = await request(`${process.env.BACKEND_URI}`, GET_POSTS)
+
+
+            return { posts: resp }
+        } catch (e) {
+
+            return  { posts: null }
+        }
+    }
+
+
+    return {  }
 }
 
 

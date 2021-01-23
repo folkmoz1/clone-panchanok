@@ -33,7 +33,7 @@ export default function MenuRight__Desktop({ user }) {
             <ClickAwayListener onClickAway={() => setActiveMenu(false)}>
                 <div
                     onClick={() => setActiveMenu(true)}
-                    className={`avatar__container ${activeMenu ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+                    className={`avatar__container md:cursor-pointer ${activeMenu ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
                 >
                     <span className="avatar__username">
                         {`@${user.username}`}
@@ -75,7 +75,6 @@ export default function MenuRight__Desktop({ user }) {
                 display: flex;
                 align-items: center;
                 gap: 1rem;
-                cursor: pointer;
                 padding: .5rem 1rem;
                 border-radius: 8px;
               }

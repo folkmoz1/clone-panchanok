@@ -27,7 +27,7 @@ const DELETE_POST = gql`
     }
 `
 
-const Card__Post = ({post, user, setPosts, posts}) => {
+const Card__Post = ({post, user, setPosts, posts, mutatePosts}) => {
     const [anchorEl, setAnchorEl] = useState(null)
 
     const inputRef = createRef()
@@ -39,11 +39,11 @@ const Card__Post = ({post, user, setPosts, posts}) => {
     const images = post.images.map(img => img.url)
 
     const [ deleteFunc, { loading:deleteLoading } ] = useMutation(DELETE_POST,{
-        refetchQueries: [
-            {
-                query: GET_POSTS
-            }
-        ]
+        // refetchQueries: [
+        //     {
+        //         query: GET_POSTS
+        //     }
+        // ]
     })
 
     const deletePost = async () => {
@@ -53,7 +53,8 @@ const Card__Post = ({post, user, setPosts, posts}) => {
                 setAnchorEl(null)
                 const resp = await deleteFunc({ variables: { postId } })
 
-                setPosts(posts.filter(p => p.id !== postId))
+                // setPosts(posts.filter(p => p.id !== postId))
+                mutatePosts()
             }
         } catch (e) {
             console.log(e)

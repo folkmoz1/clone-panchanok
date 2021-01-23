@@ -42,11 +42,11 @@ const CreatePost = ({ setOpen, setSSC }) => {
     const [loading, setLoading] = useState(false)
 
     const [createPost, { loading:createLoading }  ] = useMutation(CREATE_POST, {
-        refetchQueries: [
-            {
-                query: GET_POSTS
-            }
-        ]
+        // refetchQueries: [
+        //     {
+        //         query: GET_POSTS
+        //     }
+        // ]
     })
 
     const inputRef = useRef()

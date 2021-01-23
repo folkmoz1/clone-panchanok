@@ -30,7 +30,6 @@ function MyApp({ Component, pageProps, $initialState }) {
     const [initialState, setInitialState] = useState($initialState)
 
     useEffect(() => {
-        NProgress.start()
         if (initialState.$token) {
             localStorage.setItem('token', initialState.$token)
         } else {
@@ -45,6 +44,7 @@ function MyApp({ Component, pageProps, $initialState }) {
 
                     <Head>
                         <title>panchanok | home</title>
+                        <meta name={'description'} content={'my panchanok'}/>
                     </Head>
 
                     <>
@@ -57,13 +57,6 @@ function MyApp({ Component, pageProps, $initialState }) {
                         <style jsx global>{`
                           #__next {
                             overflow-x: hidden;
-                          }
-                          
-                          #nprogress {
-                            z-index: 999999;
-                            position: fixed;
-                            top: 0;
-                            left: 0;
                           }
 
                           .content__body {

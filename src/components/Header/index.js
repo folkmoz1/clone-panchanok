@@ -60,8 +60,8 @@ export default function Header() {
 
     return (
         <>
-            <header className={"border-b border-gray-200"}>
-                <div className={"header__content"}>
+            <header>
+                <div className={"header__content border-b border-gray-200"}>
                     <div className="header__menu-left">
                         <div className="logo__container">
                             <Link href={'/'}>
@@ -109,17 +109,15 @@ export default function Header() {
                 display: flex;
                 justify-content: space-around;
                 align-items: center;
+                min-height: 70px;
+                max-height: 70px;
+                background: #fff;
               }
 
               header {
-                display: flex;
-                justify-content: center;
                 position: fixed;
-                height: 70px;
                 top: 0;
-                right: 0;
-                left: 0;
-                background-color: #fff;
+                width: 100%;
                 z-index: 109;
               }
             `}</style>
