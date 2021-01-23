@@ -93,7 +93,6 @@ export default function Index({ posts: initialData, initialState: { $token, $use
     })
 
     useEffect(() => {
-        if (postError) console.log(postError)
 
         if (postData) {
             mutate()
