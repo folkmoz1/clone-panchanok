@@ -20,14 +20,12 @@ const GridImage = (
             direction="row"
             justify="center"
             style={{
-                backgroundImage: `url(${image}`,
-                height,
-                width,
-                borderRadius,
-                margin,
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
+                height: height,
+                width: width,
+                borderRadius: borderRadius,
+                margin: margin,
+                background: `url("${image}") center/cover no-repeat`,
+
             }}
             onClick={() => !preview ? setShowImage(image) : {}}
             className={"w-auto relative md:cursor-pointer preview__container overflow-hidden"}
@@ -117,16 +115,16 @@ const GridImage = (
 )
 
 
-const displayImage = (images, props, setShowImage) => {
+const DisplayImage = ({images, preview, setShowImage, deletePreviewImage}) => {
 
-    const imgLength = props.images.length
+    const imgLength = images.length
 
 
     return (
         <>
             {
                 imgLength === 1 ? (
-                        props.preview ? (
+                        preview ? (
                             <Grid container justify={"center"}>
                                 <GridImage
                                     image={images[0]}
@@ -134,9 +132,9 @@ const displayImage = (images, props, setShowImage) => {
                                     width={400}
                                     setShowImage={setShowImage}
                                     borderRadius={5}
-                                    deletePreviewImage={props.deletePreviewImage}
+                                    deletePreviewImage={deletePreviewImage}
                                     index={0}
-                                    preview={props.preview}
+                                    preview={preview}
                                 />
                             </Grid>
                         ) : (
@@ -145,9 +143,9 @@ const displayImage = (images, props, setShowImage) => {
                                 width={'100%'}
                                 image={images[0]}
                                 setShowImage={setShowImage}
-                                deletePreviewImage={props.deletePreviewImage}
+                                deletePreviewImage={deletePreviewImage}
                                 index={0}
-                                preview={props.preview}
+                                preview={preview}
                             />
                         ))
                     : imgLength === 2 ? (
@@ -162,9 +160,9 @@ const displayImage = (images, props, setShowImage) => {
                                             margin={'0 0 5px 0'}
                                             borderRadius={5}
                                             setShowImage={setShowImage}
-                                            deletePreviewImage={props.deletePreviewImage}
+                                            deletePreviewImage={deletePreviewImage}
                                             index={index}
-                                            preview={props.preview}
+                                            preview={preview}
                                         />
                                     </Grid>
                                 );
@@ -179,9 +177,9 @@ const displayImage = (images, props, setShowImage) => {
                                     height={'100%'}
                                     setShowImage={setShowImage}
                                     borderRadius={5}
-                                    deletePreviewImage={props.deletePreviewImage}
+                                    deletePreviewImage={deletePreviewImage}
                                     index={0}
-                                    preview={props.preview}
+                                    preview={preview}
                                 />
                             </Grid>{" "}
                             <Grid item md={6} lg={6} xl={6} xs={6} sm={6}>
@@ -198,9 +196,9 @@ const displayImage = (images, props, setShowImage) => {
                                             height={195}
                                             borderRadius={5}
                                             setShowImage={setShowImage}
-                                            deletePreviewImage={props.deletePreviewImage}
+                                            deletePreviewImage={deletePreviewImage}
                                             index={index}
-                                            preview={props.preview}
+                                            preview={preview}
                                         />
                                     ) : null
                                 )}
@@ -209,10 +207,10 @@ const displayImage = (images, props, setShowImage) => {
 
                     ) : imgLength === 4 ? (
                         <Grid container className={"gap-1.5"} wrap={"nowrap"}>
-                            <Grid item md={props.preview ? 6 : 8} lg={props.preview ? 6 : 8} xl={props.preview ? 6 : 8}
+                            <Grid item md={preview ? 6 : 8} lg={preview ? 6 : 8} xl={preview ? 6 : 8}
                                   xs={6} sm={6}>
                                 {
-                                    props.preview ? (
+                                    preview ? (
                                         images.map((image, index) =>
                                             index != 2 && index != 3 ?
                                                 (
@@ -224,9 +222,9 @@ const displayImage = (images, props, setShowImage) => {
                                                         setShowImage={setShowImage}
                                                         borderRadius={5}
                                                         key={index}
-                                                        deletePreviewImage={props.deletePreviewImage}
+                                                        deletePreviewImage={deletePreviewImage}
                                                         index={index}
-                                                        preview={props.preview}
+                                                        preview={preview}
                                                     />
                                                 ) : null
                                         )
@@ -236,29 +234,29 @@ const displayImage = (images, props, setShowImage) => {
                                             image={images[0]}
                                             borderRadius={5}
                                             setShowImage={setShowImage}
-                                            deletePreviewImage={props.deletePreviewImage}
+                                            deletePreviewImage={deletePreviewImage}
                                             index={0}
-                                            preview={props.preview}
+                                            preview={preview}
                                         />
                                     )
                                 }
                             </Grid>{" "}
-                            <Grid item md={props.preview ? 6 : 4} lg={props.preview ? 6 : 4} xl={props.preview ? 6 : 4}
+                            <Grid item md={preview ? 6 : 4} lg={preview ? 6 : 4} xl={preview ? 6 : 4}
                                   xs={6} sm={6}>
                                 {images.map((image, index) => {
-                                    const condition = props.preview ? index != 0 && index != 1 : index != 0
+                                    const condition = preview ? index != 0 && index != 1 : index != 0
 
                                     return condition ? (
                                         <GridImage
-                                            height={props.preview ? 200 : 160}
+                                            height={preview ? 200 : 160}
                                             margin={index === 2 && '5px 0'}
                                             image={image}
                                             setShowImage={setShowImage}
                                             borderRadius={5}
                                             key={index}
-                                            deletePreviewImage={props.deletePreviewImage}
+                                            deletePreviewImage={deletePreviewImage}
                                             index={index}
-                                            preview={props.preview}
+                                            preview={preview}
                                         />
                                     ) : null
                                 })}
@@ -271,4 +269,4 @@ const displayImage = (images, props, setShowImage) => {
     )
 }
 
-export default displayImage
+export default DisplayImage

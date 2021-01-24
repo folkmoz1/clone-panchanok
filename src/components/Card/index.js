@@ -8,12 +8,11 @@ import {createRef, useState} from "react";
 import {NProgress} from '../../../utils/NProgress'
 
 
-const PictureGrid = dynamic(import("../PictureGrid"))
-const Actions = dynamic(import("../Actions"))
+import PictureGrid from "../PictureGrid";
+import Actions from "../Actions";
 import CommentInput from "../Comment/Comment--Input";
 import CustomMenu from "../Popup/Menu";
 import {gql, useMutation} from "@apollo/client";
-import {GET_POSTS} from "../../pages";
 import DotLoad from "../Loader/dotLoad";
 
 const DELETE_POST = gql`
@@ -27,7 +26,7 @@ const DELETE_POST = gql`
     }
 `
 
-const Card__Post = ({post, user, setPosts, posts, mutatePosts}) => {
+const Card__Post = ({post, user, mutatePosts}) => {
     const [anchorEl, setAnchorEl] = useState(null)
 
     const inputRef = createRef()
@@ -39,11 +38,6 @@ const Card__Post = ({post, user, setPosts, posts, mutatePosts}) => {
     const images = post.images.map(img => img.url)
 
     const [ deleteFunc, { loading:deleteLoading } ] = useMutation(DELETE_POST,{
-        // refetchQueries: [
-        //     {
-        //         query: GET_POSTS
-        //     }
-        // ]
     })
 
     const deletePost = async () => {
@@ -53,7 +47,6 @@ const Card__Post = ({post, user, setPosts, posts, mutatePosts}) => {
                 setAnchorEl(null)
                 const resp = await deleteFunc({ variables: { postId } })
 
-                // setPosts(posts.filter(p => p.id !== postId))
                 mutatePosts()
             }
         } catch (e) {

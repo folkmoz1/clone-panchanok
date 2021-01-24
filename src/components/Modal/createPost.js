@@ -6,7 +6,6 @@ import Image from "next/image";
 import {useAuthState} from "../../context/auth";
 import {gql, useMutation} from "@apollo/client";
 import {NProgress} from '../../../utils/NProgress'
-import {GET_POSTS} from "../../pages";
 import LineLoad from "../Loader/lineLoad";
 
 const CREATE_POST = gql`
@@ -41,13 +40,7 @@ const CreatePost = ({ setOpen, setSSC }) => {
     const [uploaded, setUploaded] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const [createPost, { loading:createLoading }  ] = useMutation(CREATE_POST, {
-        // refetchQueries: [
-        //     {
-        //         query: GET_POSTS
-        //     }
-        // ]
-    })
+    const [createPost, { loading:createLoading }  ] = useMutation(CREATE_POST)
 
     const inputRef = useRef()
 

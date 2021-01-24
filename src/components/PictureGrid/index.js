@@ -1,6 +1,6 @@
 import {Dialog, Grid} from '@material-ui/core'
 import {useState} from "react";
-import displayImage from "./displayImage";
+import DisplayImage from "./displayImage";
 
 
 export default function PictureGrid( props ) {
@@ -10,7 +10,12 @@ export default function PictureGrid( props ) {
     return (
         <>
             <div style={{width: props.width || '100%', maxWidth: props.maxWidth}}>
-                {displayImage(props.images, props, setShowImage)}
+                <DisplayImage
+                    preview={props.preview}
+                    deletePreviewImage={props.deletePreviewImage}
+                    setShowImage={setShowImage}
+                    images={props.images}
+                />
                 {showImage && (
                     <Dialog
                         scroll={"body"}

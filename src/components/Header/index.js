@@ -61,27 +61,29 @@ export default function Header() {
     return (
         <>
             <header>
-                <div className={"header__content border-b border-gray-200"}>
-                    <div className="header__menu-left">
-                        <div className="logo__container">
-                            <Link href={'/'}>
-                                <a className={'logo__link text-2xl text-green-400'}>
-                                    panchanok
-                                </a>
-                            </Link>
+                <div className={"border-b border-gray-200 w-full"}>
+                    <div className={"header__content "}>
+                        <div className="header__menu-left">
+                            <div className="logo__container">
+                                <Link href={'/'}>
+                                    <a className={'logo__link text-2xl text-green-400'}>
+                                        panchanok
+                                    </a>
+                                </Link>
+                            </div>
                         </div>
-                    </div>
-                    <div className="header__search">
-                        <div className={""}>
+                        <div className="header__search">
+                            <div className={""}>
 
+                            </div>
                         </div>
-                    </div>
-                    <div className="header__menu-right">
-                        {
-                            state.user
-                            ? <MenuRight__Desktop user={state.user} />
-                            : <WithoutAuthMenu />
-                        }
+                        <div className="header__menu-right">
+                            {
+                                state.user
+                                    ? <MenuRight__Desktop user={state.user} />
+                                    : <WithoutAuthMenu />
+                            }
+                        </div>
                     </div>
                 </div>
             </header>
@@ -112,6 +114,7 @@ export default function Header() {
                 min-height: 70px;
                 max-height: 70px;
                 background: #fff;
+                margin: 0 auto;
               }
 
               header {

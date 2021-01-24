@@ -96,6 +96,7 @@ export default function Index({ posts: initialData, initialState: { $token, $use
 
         if (postData) {
             mutate()
+            console.log(data?.getPost.concat(postData.newPost))
         }
 
     },[postData, postError])
@@ -125,8 +126,6 @@ export default function Index({ posts: initialData, initialState: { $token, $use
                                 post={post}
                                 user={$user}
                                 key={post.id}
-                                // posts={posts}
-                                // setPosts={setPosts}
                                 mutatePosts={mutate}
                             />
                         ))
