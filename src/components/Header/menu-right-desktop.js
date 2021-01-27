@@ -153,6 +153,47 @@ const DropdownMenu = ({user, setOpenMenu}) => {
                 </CSSTransition>
             </div>
             <style jsx global>{`
+
+              .menu__main-enter {
+                transform: translateX(-110%);
+              }
+
+              .menu__main-enter-active {
+                transform: translateX(0);
+                transition: all 500ms ease;
+              }
+
+              .menu__main-exit {
+                transform: translateX(0);
+              }
+
+              .menu__main-exit-active {
+                transform: translateX(-110%);
+                transition: all 500ms ease;
+              }
+
+              .menu__message-enter {
+                transform: translateX(110%);
+                position: absolute;
+                top: 16px;
+              }
+
+              .menu__message-enter-active {
+                transform: translateX(0%);
+                transition: all 500ms ease;
+                width: 218px;
+              }
+
+              .menu__message-exit {
+                position: absolute;
+                top: 16px;
+              }
+
+              .menu__message-exit-active {
+                transform: translateX(110%);
+                transition: all 500ms ease;
+              }
+
               svg {
                 width: 20px;
                 height: 20px;
@@ -166,42 +207,6 @@ const DropdownMenu = ({user, setOpenMenu}) => {
                 overflow: hidden;
               }
 
-              .menu__main-enter {
-                position: absolute;
-                transform: translateX(-120%);
-              }
-
-              .menu__main-enter-active {
-                transform: translateX(0);
-                transition: all 500ms ease;
-              }
-
-              .menu__main-exit {
-                position: absolute;
-              }
-
-              .menu__main-exit-active {
-                transform: translateX(-120%);
-                transition: 500ms ease;
-              }
-
-              .menu__message-enter {
-                transform: translateX(120%);
-              }
-
-              .menu__message-enter-active {
-                transform: translateX(0%);
-                transition: all 500ms ease;
-              }
-
-              .menu__message-exit {
-
-              }
-
-              .menu__message-exit-active {
-                transform: translateX(120%);
-                transition: all 500ms ease;
-              }
 
               .avatar__menu {
                 position: absolute;

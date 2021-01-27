@@ -1,19 +1,21 @@
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import Image from "next/image";
 import {dayjs} from "../../../utils/dayjs";
 import {IconButton, MenuList, Tooltip} from "@material-ui/core";
 import {DeleteOutlined, MoreHoriz} from "@material-ui/icons";
-import {createRef, useState} from "react";
+import {createRef, useEffect, useState} from "react";
 import {NProgress} from '../../../utils/NProgress'
 
 
-import PictureGrid from "../PictureGrid";
 import Actions from "../Actions";
 import CommentInput from "../Comment/Comment--Input";
 import CustomMenu from "../Popup/Menu";
 import {gql, useMutation} from "@apollo/client";
 import DotLoad from "../Loader/dotLoad";
+import DisplayImage__Post from "../PictureGrid/displayImage__post";
+import CustomModal from "../Modal";
+import PostModal from "../Modal/post-modal";
+import {useRouter} from "next/router";
 
 const DELETE_POST = gql`
     mutation DELETE_POST($postId: String!) {
@@ -28,14 +30,15 @@ const DELETE_POST = gql`
 
 const Card__Post = ({post, user, mutatePosts}) => {
     const [anchorEl, setAnchorEl] = useState(null)
+    const [openModal, setOpenModal] = useState(false)
+
+    const { replace } = useRouter()
 
     const inputRef = createRef()
 
-    const {title, desc, createdAt, actions, id: postId} = post
+    const {desc, createdAt, actions, id: postId, images} = post
 
     const {profile, username, id: authorId, fullName} = post.author
-
-    const images = post.images.map(img => img.url)
 
     const [ deleteFunc, { loading:deleteLoading } ] = useMutation(DELETE_POST,{
     })
@@ -62,9 +65,15 @@ const Card__Post = ({post, user, mutatePosts}) => {
 
     }
 
+    useEffect(() => {
+        if (!openModal) {
+            replace('/', undefined, { shallow: true, scroll: false})
+        }
+    },[openModal])
+
     return (
         <>
-            <div className={`card ${deleteLoading && 'loading'}`}>
+            <div className={`card ${deleteLoading ? 'loading' : ''}`}>
                 <div className={"card__head"}>
                     <div className="flex py-2 w-full">
                         <div className="flex-0">
@@ -84,21 +93,20 @@ const Card__Post = ({post, user, mutatePosts}) => {
                             </Link>
                         </div>
                         <div className="ml-2 min-w-0 flex-grow">
-                            <div className="flex">
-                                <div className={'py-1 pl-2 pr-4 max-w-full rounded cont'}>
-                                    <Link href={`/@${username}`}>
-                                        <a className={'hover:underline contents text-1r font-semibold cursor-default md:cursor-pointer '}>
-                                            <div
-                                                className={'mb-1 overflow-hidden whitespace-nowrap overflow-ellipsis'}>{fullName}</div>
-                                        </a>
-                                    </Link>
-                                    <Tooltip title={`${dayjs(createdAt).format('DD MMM เมื่อ H:mm')}`}>
-                                        <div className={'mr-2 text-gray-400 text-xs'}>
-                                            {dayjs(createdAt).fromNow()}
-                                        </div>
-                                    </Tooltip>
+                            <Link href={`/@${username}`}>
+                                <a className={'hover:underline contents text-1r font-semibold cursor-default md:cursor-pointer '}>
+                                    <div
+                                        className={'mb-1 overflow-hidden whitespace-nowrap overflow-ellipsis w-max'}
+                                    >
+                                        {fullName}
+                                    </div>
+                                </a>
+                            </Link>
+                            <Tooltip title={`${dayjs(createdAt).format('DD MMM เมื่อ H:mm')}`}>
+                                <div className={'mr-2 text-gray-400 text-xs w-max cursor-default md:cursor-pointer md:hover:underline'}>
+                                    {dayjs(createdAt).fromNow()}
                                 </div>
-                            </div>
+                            </Tooltip>
                         </div>
                         {
                             user && user.id === authorId &&
@@ -154,7 +162,11 @@ const Card__Post = ({post, user, mutatePosts}) => {
                         </div>
                     </div>
                 </div>
-                <PictureGrid images={images} preview={false}/>
+                <Link href={'/'} as={`/@${username}/p/${postId}`} shallow  scroll={false}>
+                    <a onClick={() => setOpenModal(true)}>
+                        <DisplayImage__Post images={images} />
+                    </a>
+                </Link>
                 <hr className={"mt-2"}/>
                 <Actions actions={actions} postId={postId} user={user} addActions={addActions} inputRef={inputRef}/>
                 {
@@ -171,6 +183,18 @@ const Card__Post = ({post, user, mutatePosts}) => {
                     </span>
                 }
             </div>
+            {
+                openModal &&
+                <CustomModal
+                    open={openModal}
+                    setOpen={setOpenModal}
+                    maxSize={`screen-xl`}
+                    bg={'bg-gray-custom2 relative'}
+                    pd={'p-4'}
+                >
+                    <PostModal post={post} />
+                </CustomModal>
+            }
             <style jsx>{`
               .spinner--wrapper {
                 position: absolute;

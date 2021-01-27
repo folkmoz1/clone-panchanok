@@ -61,9 +61,9 @@ const CreatePost = ({ setOpen, setSSC }) => {
             body: data
         })
 
-        const { public_id, url } = await resp.json()
+        const { public_id, secure_url: url, height, width } = await resp.json()
 
-        setUploaded(prev => [...prev, {public_id, url}])
+        setUploaded(prev => [...prev, {public_id, url, height, width}])
 
         return
     }

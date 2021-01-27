@@ -2,8 +2,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
 
-
-
 *, *:after, *:before {
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
@@ -58,6 +56,10 @@ button:disabled {
 @tailwind components;
 
 @tailwind utilities;
+
+.bg-gray-custom2 {
+    background: #444;
+}
 
 .rounded-50p {
     border-radius: 50%;

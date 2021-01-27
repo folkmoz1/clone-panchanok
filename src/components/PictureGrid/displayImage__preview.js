@@ -115,7 +115,7 @@ const GridImage = (
 )
 
 
-const DisplayImage = ({images, preview, setShowImage, deletePreviewImage}) => {
+const DisplayImage__preview = ({images, preview, setShowImage, deletePreviewImage}) => {
 
     const imgLength = images.length
 
@@ -269,4 +269,4 @@ const DisplayImage = ({images, preview, setShowImage, deletePreviewImage}) => {
     )
 }
 
-export default DisplayImage
+export default DisplayImage__preview

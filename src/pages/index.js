@@ -35,6 +35,8 @@ export const GET_POSTS = `
             }
             images {
                 url
+                width
+                height
             }
             createdAt
         }
@@ -70,6 +72,8 @@ const NEW_POST = gql`
             }
             images {
                 url
+                width
+                height
             }
         }
     }
@@ -96,7 +100,6 @@ export default function Index({ posts: initialData, initialState: { $token, $use
 
         if (postData) {
             mutate()
-            console.log(data?.getPost.concat(postData.newPost))
         }
 
     },[postData, postError])
@@ -159,7 +162,7 @@ Index.getInitialProps =  async ({ req, res, isSsr }) => {
     }
 
 
-    return {  }
+    return { posts: null  }
 }
 
 
