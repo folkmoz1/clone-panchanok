@@ -80,7 +80,7 @@ export default function PostModal({ post }) {
                                             {`${currentImage + 1}/${images.length}`}
                     </span>
                 </div>
-                <div className={`w-full h-full absolute top-0 right-0 bg-white ${ImageLength ? 'md:w-1/3' : 'md:w-1/2'}`}>
+                <div className={`w-full h-full absolute top-2/3 md:top-0 right-0 bg-white  ${ImageLength ? 'md:w-1/3' : 'md:w-1/2'}`}>
                     <div>
                         hello
                     </div>
